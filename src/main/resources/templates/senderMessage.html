@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Discord Message Sender</title>
+    <!-- 최신 jQuery 버전 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+<form th:action="@{/discord/send-message}" method="post" id="discordForm">
+    <!-- 메시지 입력란 및 전송 버튼 -->
+    <label for="message">Message:</label>
+    <input type="text" id="message" name="message">
+    <button type="button" onclick="sendMessage()">Send</button>
+</form>
+
+<script th:inline="javascript">
+    function sendMessage() {
+        // 사용자가 입력한 메시지 가져오기
+        var message = $("#message").val();
+        $.ajax({
+            type: "GET",
+            url: "/discord/send-message",
+            data: { defaultMessage: message }, // defaultMessage라는 이름으로 메시지 데이터 전달
+            success: function(response) {
+                // 성공 시 알림 표시 및 입력란 초기화
+                alert(response);
+                $("#message").focus().val("");
+            },
+            error: function(xhr, status, error) {
+                // 오류 시 알림 표시
+                alert("Error: " + error);
+            }
+        });
+    }
+</script>
+</body>
+</html>
